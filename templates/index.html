@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>票务管理系统</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>票务管理系统</h1>
+        <div class="button-container">
+            <a href="/sign"><button>放票</button></a>
+            <a href="/check"><button>检票</button></a>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
