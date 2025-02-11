@@ -11,7 +11,7 @@ def mainpg():
 
 @app.route('/sign')
 def tks():
-    return render_template('fp.html')
+    return render_template('neofp.html')
 
 
 @app.route('/sign/list')
@@ -32,7 +32,7 @@ def sbu():
         rest = None
     else:
         rest = json.loads(rest)
-    return render_template('result.html',user=rest[0])
+    return render_template('result.html',user=rest[0],msg="查找结果")
 
 @app.route("/sign/sbi/",methods=["POST"])
 def sbi():
@@ -45,7 +45,39 @@ def sbi():
         rest = None
     else:
         rest = json.loads(rest)
-    return render_template('result.html',user=rest[0])
+    return render_template('result.html',user=rest[0],msg="查找结果")
+
+@app.route('/sign/add')
+def add():
+    return render_template('add.html')
+
+@app.route('/sign/add_backend',methods=['POST'])
+def add_be():
+    usr = request.form.get("username")
+    url = f"http://127.0.0.1:7788/add"
+    form_data = {'username': usr}
+    response = requests.post(url,data=form_data)
+    rest = response.text
+    rest = json.loads(rest)
+    return render_template('result.html',user=rest,msg="添加结果")
+    
+@app.route('/sign/delete')
+def delete():
+    return render_template("delete.html")
+
+@app.route('/sign/delete_backend',methods=['POST'])
+def del_backend():
+    try:
+        uid = request.form.get('id')
+        url = f"http://127.0.0.1:7788/remove"
+        form_data = {'id': uid}
+        response = requests.post(url,data=form_data)
+        rest = response.text
+        rest = json.loads(rest)
+        msg="删除成功！"
+    except Exception as e:
+        msg = f"删除失败！原因：{e}，处理{response.text}时发生异常。"
+    return render_template('result.html',user=None,msg=msg)
 
 if __name__ == '__main__':
     app.run(port=7789)

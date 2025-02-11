@@ -116,6 +116,7 @@ class FileOperator:
         for item in self.data:
             if item['id']==id:
                 item['chksts']=True
+                return item
     def ShowUserByID(self,id):
         for item in self.data:
             if item['id']==id:
@@ -136,29 +137,31 @@ def mainpage():
 @app.route("/add",methods=['POST'])
 def add():
     val = request.form.get("username")
-    fo.Add(val)
+    u = fo.Add(val)
     fo.Sync()
-    return str([{"return":0,"message":"Success!"}])
+    return json.dumps(u)
 
 @app.route("/remove",methods=['POST'])
 def remove():
     try:
         val = request.form.get("id")
-        fo.Remove(int(val))
+        u = fo.Remove(int(val))
         fo.Sync()
-        return str([{"return":0,"message":"Success!"}])
-    except:
-        return str([{"return":-1,"message":"Error!"}])
+        return json.dumps(u)
+    except Exception as e:
+        msg = f"Error! {e}"
+        return str([{"return":-1,"message":msg}])
 
 @app.route("/check",methods=['id'])
 def check():
     try:
         val = request.form.get('id')
-        fo.CheckTicket(val)
+        u = fo.CheckTicket(val)
         fo.Sync()
-        return str([{"return":0,"message":"Success!"}])
-    except:
-        return str([{"return":-1,"message":"Error!"}])
+        return json.dumps({"ret":1})
+    except Exception as e:
+        msg = f"Error! {e}"
+        return str([{"return":-1,"message":msg}])
     
 @app.route('/search/username/<usr>')
 def search_usr(usr):

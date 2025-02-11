@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>票务管理系统 - 放票</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        a {
+            text-decoration: none;
+        }
+        .form-inline {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin: 5px;
+        }
+        .form-control {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>票务管理系统 - 放票</h1>
+        <div class="button-container">
+            <a href="/sign/list"><button>列出全部</button></a>
+            <form action="/sign/sbu" method="post" class="form-inline">
+                <input type="text" name="username" placeholder="用户名" required class="form-control">
+                <button type="submit" class="btn btn-primary">按用户名查找</button>
+            </form>
+            <form action="/sign/sbi" method="post" class="form-inline">
+                <input type="text" name="id" placeholder="ID" required class="form-control">
+                <button type="submit" class="btn btn-primary">按ID查找</button>
+            </form>
+            <a href="/sign/add"><button>添加</button></a>
+            <a href="/sign/delete"><button>删除</button></a>
+            <a href="/"><button>返回</button></a>
+        </div>
+        <script>
+            // JavaScript 示例：动态添加功能
+            document.addEventListener('DOMContentLoaded', function() {
+                // 示例：点击按钮时执行某些操作
+                document.querySelectorAll('.btn').forEach(button => {
+                    button.addEventListener('click', function(event) {
+                        console.log(`Button clicked: ${event.target.textContent}`);
+                    });
+                });
+            });
+        </script>
+    </div>
+    <!-- 引入 Bootstrap JS 和依赖 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+

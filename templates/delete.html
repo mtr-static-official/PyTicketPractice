@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>票务管理系统 - 删除</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f44336; /* 红色背景 */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+        .container {
+            background-color: #e53935; /* 较深的红色背景 */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h1 {
+            color: white;
+            margin-bottom: 30px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #c62828; /* 更深的红色按钮 */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #b71c1c; /* 最深的红色按钮 */
+        }
+        a {
+            text-decoration: none;
+        }
+        .warning-message {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>票务管理系统 - 删除</h1>
+        <div class="warning-message">
+            <strong>警告：</strong> 您正在执行删除操作，请确认您要删除的记录。
+        </div>
+        <form action="/sign/delete_backend" method="post" id="deleteForm" class="hidden">
+            <div class="form-group">
+                <label for="id">ID</label>
+                <input type="text" class="form-control" id="id" name="id" placeholder="请输入ID" required>
+            </div>
+            <button type="submit" class="btn btn-danger">删除</button>
+        </form>
+        <a href="/">
+            <button class="btn btn-secondary">返回</button>
+        </a>
+        <script>
+            // JavaScript 示例：强制观看3秒的警示语
+            document.addEventListener('DOMContentLoaded', function() {
+                const warningMessage = document.querySelector('.warning-message');
+                const deleteForm = document.getElementById('deleteForm');
+
+                setTimeout(() => {
+                    warningMessage.classList.add('hidden');
+                    deleteForm.classList.remove('hidden');
+                }, 3000); // 3秒后显示表单
+
+                // 示例：点击按钮时执行某些操作
+                document.querySelectorAll('.btn').forEach(button => {
+                    button.addEventListener('click', function(event) {
+                        console.log(`Button clicked: ${event.target.textContent}`);
+                    });
+                });
+            });
+        </script>
+    </div>
+    <!-- 引入 Bootstrap JS 和依赖 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+
