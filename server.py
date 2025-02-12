@@ -121,6 +121,13 @@ class FileOperator:
         for item in self.data:
             if item['id']==id:
                 return item
+    def GetCurrentCheckedNumber(self):
+        sum = 0
+        for item in self.data:
+            if item['chksts']:
+                sum+=1
+        return sum
+    
 
 fo = FileOperator(PATH)
 
@@ -170,6 +177,22 @@ def search_usr(usr):
 @app.route('/search/id/<int:id>')
 def search_id(id):
     return json.dumps(fo.ShowUserByID(id))
+
+@app.route('/getnum/<int:id>')
+def gnid(id):
+    '''
+    1：获取检票人数
+    2：获取未检票人数
+    '''
+    if id==1:
+        return json.dumps([{'numbers':fo.GetCurrentCheckedNumber()}])
+    else:
+        return json.dumps([{'numbers':fo.data[-1]['id']-fo.GetCurrentCheckedNumber()}])
+
+@app.route('/sync')
+def sy():
+    fo.Sync()
+    return json.dumps([{'resp':"success!"}])
 
 if __name__ == '__main__':
     app.run(port=7788)

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>票务管理系统 - 放票</title>
+    <title>票务管理系统 - 检票</title>
     <!-- 引入 Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -23,17 +23,27 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 800px;
+            max-width: 600px;
+            text-align: center;
         }
         h1 {
             color: #333;
             margin-bottom: 30px;
         }
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
+        .info-box {
+            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 5px;
             margin-bottom: 20px;
+        }
+        .statistic-item {
+            margin-bottom: 10px;
+        }
+        .green-text {
+            color: green;
+        }
+        .red-text {
+            color: red;
         }
         button {
             background-color: #007bff;
@@ -44,7 +54,6 @@
             cursor: pointer;
             border-radius: 5px;
             transition: background-color 0.3s ease;
-            margin: 5px;
         }
         button:hover {
             background-color: #0056b3;
@@ -52,34 +61,31 @@
         a {
             text-decoration: none;
         }
-        .form-inline {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            margin: 5px;
-        }
-        .form-control {
-            margin-right: 10px;
+        .button-container {
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>票务管理系统 - 放票</h1>
+        <h1>票务管理系统 - 检票</h1>
+        <div class="info-box">
+            <div class="statistic-item">
+                <strong>当前购票人数:</strong> {{ bnum }}
+            </div>
+            <div class="statistic-item">
+                <strong>已检票人数:</strong> <span class="green-text">{{ cnum }}</span>
+            </div>
+            <div class="statistic-item">
+                <strong>未检票人数:</strong> <span class="red-text">{{ nnum }}</span>
+            </div>
+            <div class="statistic-item">
+                <strong>到场率:</strong> {{ arate }}%
+            </div>
+        </div>
         <div class="button-container">
-            <p>目前买票人数：{{ number }}</p><br>
-            <a href="/sign/list"><button>列出全部</button></a>
-            <form action="/sign/sbu" method="post" class="form-inline">
-                <input type="text" name="username" placeholder="用户名" required class="form-control">
-                <button type="submit" class="btn btn-primary">按用户名查找</button>
-            </form>
-            <form action="/sign/sbi" method="post" class="form-inline">
-                <input type="text" name="id" placeholder="ID" required class="form-control">
-                <button type="submit" class="btn btn-primary">按ID查找</button>
-            </form>
-            <a href="/sign/add"><button>添加</button></a>
-            <a href="/sign/delete"><button>删除</button></a>
-            <a href="/"><button>返回</button></a>
+            <a href="/check-in/start"><button>开始查验</button></a>
+            <a href="/"><button class="btn btn-secondary">返回主页</button></a>
         </div>
         <script>
             // JavaScript 示例：动态添加功能
