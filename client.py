@@ -37,7 +37,7 @@ def listall():
     except Exception as e:
         return render_template('result.html',user=None,msg=dbugmsg(f"操作失败，发生了{e}"))
 
-@app.route("/sign/sbu/",methods=["POST"])
+@app.route("/sign/sbu",methods=["POST"])
 def sbu():
     try:
         un = request.form.get('username')
@@ -53,7 +53,7 @@ def sbu():
     except Exception as e:
         return render_template('result.html',user=None,msg=dbugmsg(f"操作失败，发生了{e}"))
 
-@app.route("/sign/sbi/",methods=["POST"])
+@app.route("/sign/sbi",methods=["POST"])
 def sbi():
     try:
         un = request.form.get('id')
