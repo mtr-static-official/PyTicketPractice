@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>票务管理系统 - 结果</title>
+    <!-- 引入 Bootstrap CSS -->
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -55,6 +56,9 @@
         button:hover {
             background-color: #0056b3;
         }
+        a {
+            text-decoration: none;
+        }
         .alert {
             margin-top: 20px;
         }
@@ -94,23 +98,24 @@
         {% endif %}
         <a href="/sign" class="btn btn-secondary">返回上一级</a>
     </div>
-
+    <!-- NFC 写入脚本 -->
     <script>
-        async function writeToNFC(ticketID) {
-            if (!('NDEFReader' in window.navigator)) {
-                alert('您的设备不支持 NFC 功能');
-                return;
-            }
-            try {
-                const ndef = new NDEFReader();
-                await ndef.write(ticketID);
-                alert('NFC 写入成功: ' + ticketID);
-            } catch (error) {
-                alert('NFC 写入失败: ' + error);
-            }
+      async function writeToNFC(ticketid) {
+        if ('NDEFReader' in window) {
+          try {
+            const ndef = new NDEFReader();
+            // 将 ticketid 作为纯文本写入 NFC 标签
+            await ndef.write(ticketid);
+            alert("成功写入 NFC 标签: " + ticketid);
+          } catch (error) {
+            alert("写入 NFC 标签失败: " + error);
+          }
+        } else {
+          alert("当前设备或浏览器不支持 NFC 功能");
         }
+      }
     </script>
-
+    <!-- 引入 Bootstrap JS 和依赖 -->
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.slim.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/popper.js/2.11.8/cjs/popper.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.min.js"></script>
