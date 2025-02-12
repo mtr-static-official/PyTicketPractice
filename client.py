@@ -124,5 +124,34 @@ def check_mpg():
     except Exception as e:
         return render_template('result.html',user=None,msg=dbugmsg(f"操作失败，发生了{e}"))
 
+@app.route('/check/start')
+def checker():
+    try:
+        return render_template('check_nfc.html')
+    except Exception as e:
+        return render_template('result.html',user=None,msg=dbugmsg(f"操作失败，发生了{e}"))
+
+@app.route('/check/backend', methods=['POST'])
+def check_backend():
+    try:
+        id_ = request.form.get('id')
+        username = request.form.get('username')
+        ticket_id = request.form.get('ticketid')
+        url = f"http://127.0.0.1:7788/checker"
+        form_data = {'id': id_,'username':username,'ticketid':ticket_id}
+        response = requests.post(url,data=form_data)
+        rest = response.text
+        rest = json.loads(rest)
+        rof = rest[0]['resp']
+        print(f'{rest}')
+        if rof:
+            url = f"http://127.0.0.1:7788/check"
+            form_data = {'id': id_}
+            resp = requests.post(url,data=form_data)
+        return render_template('chk_result.html',rof=rof)
+    except Exception as e:
+        return render_template('result.html',user=None,msg=dbugmsg(f"操作失败，发生了{e}"))
+    
+
 if __name__ == '__main__':
-    app.run(port=7789)
+    app.run(port=7789,host='0.0.0.0')

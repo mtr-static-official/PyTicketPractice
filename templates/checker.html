@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>票务管理系统 - 查验</title>
+  <!-- 引入 Bootstrap 5 CSS -->
+  <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <!-- 引入 Font Awesome 用于图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- 引入 html5-qrcode 库 -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    body {
+      background: #f0f2f5;
+    }
+    .card {
+      margin-top: 100px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+    .card-header {
+      background-color: #007bff;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card mx-auto" style="max-width: 500px;">
+      <div class="card-header text-center">
+        <h4>票务管理系统 - 查验</h4>
+      </div>
+      <div class="card-body">
+        <form method="post" action="/check/backend">
+          {# 如果使用 Flask-WTF 等可以启用 csrf_token 保护 #}
+          {% if csrf_token %}
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          {% endif %}
+          <div class="mb-3">
+            <label for="user_id" class="form-label">ID</label>
+            <input type="text" class="form-control" id="user_id" name="id" placeholder="请输入ID" required>
+          </div>
+          <div class="mb-3">
+            <label for="username" class="form-label">用户名</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名" required>
+          </div>
+          <div class="mb-3">
+            <label for="ticketid" class="form-label">票据ID</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="ticketid" name="ticketid" placeholder="扫描二维码获取票据ID" required>
+              <button class="btn btn-outline-secondary" type="button" id="scan-btn">
+                <i class="fas fa-qrcode"></i> 扫描
+              </button>
+            </div>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">提交</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 模态框，用于显示二维码扫描器 -->
+  <div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="qrModalLabel">扫描二维码</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+        </div>
+        <div class="modal-body">
+          <!-- 此处展示二维码扫描器 -->
+          <div id="qr-reader" style="width: 100%; height: 400px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 引入 Bootstrap JS Bundle（包含 Popper） -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    let html5QrcodeScanner;
+
+    // 扫描成功的回调
+    function onScanSuccess(decodedText, decodedResult) {
+      // 将扫描到的内容填入票据ID输入框
+      document.getElementById('ticketid').value = decodedText;
+      // 停止扫描并清空容器
+      html5QrcodeScanner.stop().then(() => {
+        document.getElementById("qr-reader").innerHTML = "";
+      }).catch((err) => {
+        console.error("停止扫描错误: ", err);
+      });
+      // 关闭模态框
+      const qrModalEl = document.getElementById('qrModal');
+      const modal = bootstrap.Modal.getInstance(qrModalEl);
+      modal.hide();
+    }
+
+    // 扫描出错时的回调（可选）
+    function onScanError(errorMessage) {
+      console.error("扫描错误: ", errorMessage);
+    }
+
+    // 点击“扫描”按钮时打开模态框并启动扫描
+    document.getElementById('scan-btn').addEventListener('click', function() {
+      // 显示模态框
+      const qrModalEl = document.getElementById('qrModal');
+      const modal = new bootstrap.Modal(qrModalEl);
+      modal.show();
+
+      // 初始化并启动二维码扫描器
+      html5QrcodeScanner = new Html5Qrcode("qr-reader");
+      const config = { fps: 10, qrbox: 250 };
+      html5QrcodeScanner.start(
+        { facingMode: "environment" },
+        config,
+        onScanSuccess,
+        onScanError
+      ).catch((err) => {
+        console.error("启动扫描错误: ", err);
+      });
+    });
+
+    // 当模态框关闭时，确保停止扫描
+    document.getElementById('qrModal').addEventListener('hidden.bs.modal', function () {
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.stop().then(() => {
+          document.getElementById("qr-reader").innerHTML = "";
+        }).catch((err) => {
+          console.error("关闭模态框时停止扫描错误: ", err);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

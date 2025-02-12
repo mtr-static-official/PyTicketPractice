@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>票务管理系统 - 结果</title>
-    <!-- 引入 Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #f4f4f9;
@@ -56,9 +55,6 @@
         button:hover {
             background-color: #0056b3;
         }
-        a {
-            text-decoration: none;
-        }
         .alert {
             margin-top: 20px;
         }
@@ -80,6 +76,7 @@
                         <th>用户名</th>
                         <th>票据状态</th>
                         <th>检票状态</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,18 +85,34 @@
                         <td>{{ user.usr }}</td>
                         <td>{{ '有效' if user.tid else '无效' }}</td>
                         <td>{{ '已检票' if user.chksts else '未检票' }}</td>
+                        <td>
+                            <button onclick="writeToNFC('{{ user.tid }}')">写入 NFC</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         {% endif %}
         <a href="/sign" class="btn btn-secondary">返回上一级</a>
     </div>
-    <!-- 引入 Bootstrap JS 和依赖 -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        async function writeToNFC(ticketID) {
+            if (!('NDEFReader' in window.navigator)) {
+                alert('您的设备不支持 NFC 功能');
+                return;
+            }
+            try {
+                const ndef = new NDEFReader();
+                await ndef.write(ticketID);
+                alert('NFC 写入成功: ' + ticketID);
+            } catch (error) {
+                alert('NFC 写入失败: ' + error);
+            }
+        }
+    </script>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.slim.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/popper.js/2.11.8/cjs/popper.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.min.js"></script>
 </body>
 </html>
-
-
-

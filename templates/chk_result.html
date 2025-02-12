@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>检票结果</title>
+  <!-- 引入 Bootstrap 5 CSS（国内 CDN） -->
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <!-- 引入 Font Awesome（国内 CDN） -->
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <style>
+    body {
+      background: #f0f2f5;
+    }
+    .result-card {
+      margin-top: 100px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      padding: 20px;
+    }
+    .result-true {
+      border: 3px solid #28a745;
+      color: #28a745;
+    }
+    .result-false {
+      border: 3px solid #dc3545;
+      color: #dc3545;
+    }
+    .icon {
+      font-size: 50px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card result-card {% if rof %}result-true{% else %}result-false{% endif %}">
+      <div class="card-body">
+        {% if rof %}
+          <i class="fas fa-check-circle icon"></i>
+          <h3>检票成功</h3>
+          <p>票据有效，您已完成检票。</p>
+        {% else %}
+          <i class="fas fa-times-circle icon"></i>
+          <h3>检票失败</h3>
+          <p>票据无效，请检查票务信息。</p>
+        {% endif %}
+        <a href="/check" class="btn btn-primary mt-3">返回首页</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 引入 Bootstrap JS Bundle（国内 CDN） -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

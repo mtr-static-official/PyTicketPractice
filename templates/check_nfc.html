@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>票务管理系统 - 查验</title>
+  <!-- 引入 Bootstrap 5 CSS（国内 CDN） -->
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <!-- 引入 Font Awesome（国内 CDN） -->
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <style>
+    body {
+      background: #f0f2f5;
+    }
+    .card {
+      margin-top: 100px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+    .card-header {
+      background-color: #007bff;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card mx-auto" style="max-width: 500px;">
+      <div class="card-header text-center">
+        <h4>票务管理系统 - 查验</h4>
+      </div>
+      <div class="card-body">
+        <form method="post" action="/check/backend">
+          {# 如果使用 Flask-WTF 等可启用 csrf_token 保护 #}
+          {% if csrf_token %}
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          {% endif %}
+          <div class="mb-3">
+            <label for="user_id" class="form-label">ID</label>
+            <input type="text" class="form-control" id="user_id" name="id" placeholder="请输入ID" required>
+          </div>
+          <div class="mb-3">
+            <label for="username" class="form-label">用户名</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名" required>
+          </div>
+          <div class="mb-3">
+            <label for="ticketid" class="form-label">票据ID</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="ticketid" name="ticketid" placeholder="请扫描NFC标签获取票据ID" required>
+              <button type="button" class="btn btn-outline-secondary" id="nfc-scan-btn">
+                <i class="fas fa-wave-square"></i> 扫描 NFC
+              </button>
+            </div>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">提交</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 引入 Bootstrap JS Bundle（国内 CDN，包含 Popper） -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // 点击“扫描 NFC”按钮，尝试使用 NDEFReader 读取 NFC 标签
+    document.getElementById('nfc-scan-btn').addEventListener('click', async function() {
+      if ('NDEFReader' in window) {
+        try {
+          const ndef = new NDEFReader();
+          await ndef.scan();
+          console.log("NFC 扫描已启动，请将 NFC 标签靠近设备");
+          ndef.onreading = event => {
+            console.log("NFC 标签读取成功", event);
+            // 遍历读取到的记录
+            for (const record of event.message.records) {
+              // 此处仅处理文本记录，可根据需要扩展
+              if (record.recordType === "text") {
+                const textDecoder = new TextDecoder(record.encoding || "utf-8");
+                const data = textDecoder.decode(record.data);
+                document.getElementById('ticketid').value = data;
+                console.log("票据ID:", data);
+              }
+            }
+          };
+          ndef.onreadingerror = event => {
+            console.error("读取 NFC 标签时发生错误", event);
+            alert("读取 NFC 标签失败，请重试！");
+          };
+        } catch (error) {
+          console.error("NFC 扫描启动失败:", error);
+          alert("无法启动 NFC 扫描，请确保设备支持 NFC 并已开启。");
+        }
+      } else {
+        alert("您的浏览器不支持 NFC 功能");
+      }
+    });
+  </script>
+</body>
+</html>

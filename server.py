@@ -117,6 +117,7 @@ class FileOperator:
             if item['id']==id:
                 item['chksts']=True
                 return item
+
     def ShowUserByID(self,id):
         for item in self.data:
             if item['id']==id:
@@ -159,10 +160,10 @@ def remove():
         msg = f"Error! {e}"
         return str([{"return":-1,"message":msg}])
 
-@app.route("/check",methods=['id'])
+@app.route("/check",methods=['POST'])
 def check():
     try:
-        val = request.form.get('id')
+        val = int(request.form.get('id'))
         u = fo.CheckTicket(val)
         fo.Sync()
         return json.dumps({"ret":1})
@@ -193,6 +194,17 @@ def gnid(id):
 def sy():
     fo.Sync()
     return json.dumps([{'resp':"success!"}])
+
+@app.route('/checker',methods=['POST'])
+def ckr():
+    vali = request.form.get('id')
+    valu = request.form.get('username')
+    valt = request.form.get('ticketid')
+    print(f"{valt},{genTicketID(vali,valu)}")
+    if aes_decrypt(valt) == aes_decrypt(genTicketID(vali,valu)):
+        return json.dumps([{'resp':True}])
+    else:
+        return json.dumps([{'resp':False}])
 
 if __name__ == '__main__':
     app.run(port=7788)
